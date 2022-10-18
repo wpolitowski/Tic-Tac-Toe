@@ -36,3 +36,6 @@ body {
     font-size: 7rem;
 }
 
+.inactive {
+    pointer-events: none;
+}
