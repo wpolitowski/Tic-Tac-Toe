@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles&family=Gloria+Hallelujah&family=Monoton&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-board {
+    width: 600px;
+    height: 600px;
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    overflow: hidden;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+
+.row > * {
+    outline: 4px solid rgb(183, 210, 219);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Fuzzy Bubbles", sans-serif;
+    font-size: 7rem;
+}
+
