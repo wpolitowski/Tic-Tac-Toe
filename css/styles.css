@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles&family=Gloria+Hallelujah&family=Monoton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Monoton&display=swap');
 
 * {
     padding: 0;
@@ -8,10 +8,16 @@
 
 body {
     min-height: 100vh;
-    font-family: "Monoton", sans-serif;
+    font-family: "Bungee", sans-serif;
+    font-size: 2.5rem;
     display: grid;
     place-content: center;
     gap: 50px;
+    grid-template-areas: ".......... header ........."
+                         "player-one board player-two"
+                         ".......... turn-restart ...";
+
+                         
 }
 
 h1 {
@@ -19,6 +25,7 @@ h1 {
     line-height: 1;
     position: relative;
     top: -100px;
+    grid-area: header;
 }
 
 .game-board {
@@ -27,6 +34,19 @@ h1 {
     display: grid;
     grid-template-rows: repeat(3, 1fr);
     overflow: hidden;
+    grid-area: board;
+}
+
+.player {
+    text-transform: ;
+}
+
+.player-one {
+    grid-area: player-one;
+}
+
+.player-two {
+    grid-area: player-two;
 }
 
 .row {
@@ -47,9 +67,19 @@ h1 {
     pointer-events: none;
 }
 
-.restart {
-    /* font-family: ; */
+
+.turn-and-restart {
+    grid-area: turn-restart;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.restart-button {
+    /* font-family: "Gloria Hallelujah", sans-serif; */
+    font-family: inherit;
     font-size: 2rem;
     border: none;
-
+    grid-area: restart;
+    display: block;
 }

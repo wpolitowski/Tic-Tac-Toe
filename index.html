@@ -10,6 +10,12 @@
     </head>
     <body>
         <h1>Tic Tac Toe</h1>
+
+        <div class="player player-one">
+            <p>Player one</p>
+            <p class="score"></p>
+        </div>
+
         <div class="game-board">
             <div class="row row-1">
                 <div data-index="0 0" class="row-1 column-1"></div>
@@ -27,7 +33,16 @@
                 <div data-index="2 2" class="row-3 column-3"></div>
             </div>    
         </div>
-        <button class="restart">Restart</button>
+
+        <div class="player player-two">
+            <p>Player two</p>
+            <p class="score"></p>
+        </div>
+
+        <div class="turn-and-restart">
+            <button class="restart-button">Restart</button>
+            <div class="turn-info"></div>     
+        </div>
 
     </body>
 </html>

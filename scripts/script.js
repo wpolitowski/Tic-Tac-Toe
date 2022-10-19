@@ -9,7 +9,6 @@ const gameController = (() => {
     const _player1 = player('X');
     const _player2 = player('O');
     let _roundNum = 1;
-    let _gameFinished = false;
 
     const getCurrentSign = () => {
         return _roundNum % 2 ? _player1.getSign() : _player2.getSign();
@@ -18,14 +17,11 @@ const gameController = (() => {
     const resetGame = () => {
         gameBoard.clearBoard();
         displayController.clearBoardDisplay();
-        _roundNum = 1;
-        if (_gameFinished) {
-            displayController.toggleFields();
-            _gameFinished = false;
-        }
+        displayController.activateFields();
+        _roundNum = 1;        
     }
 
-    const _checkIfOver = () => {
+    const _isGameOver = () => {
         const arr = gameBoard.getGameBoard();
         const winners = [   ["0 0", "1 1", "2 2"],  ["0 2", "1 1", "2 0"],
                             ["0 0", "0 1", "0 2"],  ["1 0", "1 1", "1 2"],
@@ -48,11 +44,13 @@ const gameController = (() => {
                 } else {
                     console.log("Player 2 wins");
                 }
-                _gameFinished = true;
-                displayController.toggleFields();
-
-                break;
+                return true;
             }
+        }
+
+        if (_roundNum === 9) {
+            console.log("It's a draw");
+            return true;
         }
     }
 
@@ -63,21 +61,18 @@ const gameController = (() => {
         if (gameBoard.isFieldEmpty(indexX, indexY)) {
             gameBoard.markSign(indexX, indexY);
             displayController.markSign(indexX, indexY);
-            if (_roundNum >= 5) _checkIfOver();
+            if (_roundNum >= 5 && _isGameOver()) {
+                displayController.deactivateFields();
+            }
+            _roundNum++;
         }
-        
-        if (_roundNum === 9) {
-            _gameFinished = true;
-            console.log("It's a draw");
-        }
-        _roundNum++;
     }; 
     
     return { getCurrentSign, addMark, resetGame }
 })();
 
 const displayController = (() => {
-    const _restartBtn = document.querySelector('.restart');
+    const _restartBtn = document.querySelector('.restart-button');
     const _divFields = Array.from( document.querySelectorAll('[class*="row"] [class*="column"]') );
     const _divsArray = new Array(3).fill("").map( () => new Array(3).fill(""));
 
@@ -87,8 +82,12 @@ const displayController = (() => {
     _divsArray.forEach( row => row.forEach( div => div.addEventListener('click', gameController.addMark)));
     _restartBtn.addEventListener('click', gameController.resetGame);
 
-    const toggleFields = () => {
-        _divsArray.forEach( row => row.forEach( div => div.classList.toggle('inactive')));
+    const activateFields = () => {
+        _divsArray.forEach( row => row.forEach( div => div.classList.remove('inactive')));
+    }
+
+    const deactivateFields = () => {
+        _divsArray.forEach( row => row.forEach( div => div.classList.add('inactive')));
     }
 
     const markSign = (x, y) => {
@@ -99,7 +98,7 @@ const displayController = (() => {
         _divsArray.forEach( row => row.forEach( div => div.textContent = ""));
     }
 
-    return { markSign, toggleFields, clearBoardDisplay }
+    return { markSign, activateFields, deactivateFields, clearBoardDisplay }
 })();
 
 const gameBoard = (() => {
