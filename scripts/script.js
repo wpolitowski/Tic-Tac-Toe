@@ -84,7 +84,7 @@ const gameController = (() => {
 
 const displayController = (() => {
     const _restartBtn = document.querySelector('.restart-button');
-    const _divFields = Array.from( document.querySelectorAll('[class*="row"] [class*="column"]') );
+    const _divFields = Array.from( document.querySelectorAll('.game-board > *') );
     const _divsArray = new Array(3).fill("").map( () => new Array(3).fill(""));
     const _playerScore = document.querySelectorAll('.score');
     const _info = document.querySelector('.turn-info');
