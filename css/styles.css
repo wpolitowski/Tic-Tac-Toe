@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Paytone+One&family=Russo+One&display=swap');
 
+:root {
+    --red: rgb(216, 75, 152);
+    --light: #f1faeeff;
+    --light-teal: #a8dadcff;
+    --blue: #457b9dff;
+    --navy: #1d3557ff;
+}
+
+
 * {
     padding: 0;
     margin: 0;
@@ -8,32 +17,36 @@
 
 body {
     min-height: 100vh;
+    min-width: 800px;
     font-family: "Paytone One", sans-serif;
     font-size: 2.5rem;
+    color: var(--navy);
+    background-color: var(--light);
     display: grid;
-    place-content: center;
     gap: 50px;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-areas: ".......... header ........."
-                         "player-one board player-two"
-                         ".......... turn-restart ...";
+    place-content: center;
+    grid-template-areas: ".......... header    .........."
+                         ".......... turn-info .........."
+                         "player-one board     player-two"
+                         ".......... restart   ..........";
+}
 
-                         
+h1, .player > input, .turn-info {
+    text-align: center;
 }
 
 h1 {
+    grid-area: header;
     font-size: 4rem;
     line-height: 1;
-    text-align: center;
     position: relative;
-    top: -100px;
-    grid-area: header;
+    top: -50px;
+    filter: drop-shadow(-4px -4px var(--red));
 }
 
 .game-board {
     width: 400px;
     height: 400px;
-    margin: 0 200px;
     display: grid;
     grid-template: repeat(3, 1fr) / repeat(3, 1fr);
     overflow: hidden;
@@ -42,7 +55,7 @@ h1 {
 
 .player {
     display: flex;
-    flex-direction: column;
+    flex-flow: column wrap;
     justify-content: space-around;
     align-items: center;
 }
@@ -55,54 +68,63 @@ h1 {
     grid-area: player-two;
 }
 
+.player > input, .restart-button {
+    font-family: inherit;
+    background-color: inherit;
+    color: inherit;
+}
+
 .player > input {
-    width: 100%;
-    text-align: center;
+    min-width: 100px;
     border: none;
     outline: none;
     font-size: 2rem;
-    font-family: inherit;
+
 }
 
 .player > input:hover {
-    /* cursor: pointer; */
+    background-color: var(--light-teal);
 }
 
-/* .row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-} */
-
-
 .game-board > * {
-    outline: 4px solid rgb(183, 210, 219);
+    outline: 4px solid var(--light);
+    background-color: var(--navy);
+    color: var(--light-teal);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 4rem;
 }
 
+.game-board > *:hover {
+    background-color: var(--red);
+    cursor: pointer;
+}
+
 .inactive {
     pointer-events: none;
 }
 
-
-.turn-and-restart {
-    grid-area: turn-restart;
-    display: flex;
-    /* flex-direction: column; */
-    align-items: center;
-}
-
 .restart-button {
-    /* font-family: "Gloria Hallelujah", sans-serif; */
-    font-family: inherit;
+    grid-area: restart;
+    width: 50%;
+    justify-self: center;
     font-size: 2rem;
     border: none;
     grid-area: restart;
-    display: block;
+    line-height: 1;
+    padding: 1rem;
+    background-color: var(--navy);
+    color: var(--light);
+}
+
+.restart-button:hover {
+    cursor: pointer;
+    background-color: var(--red);
+    color: var(--navy);
 }
 
 .turn-info {
+    grid-area: turn-info;
     font-size: 1rem;
 }

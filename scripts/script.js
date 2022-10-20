@@ -13,10 +13,14 @@ const gameController = (() => {
     const _player1 = player('X');
     const _player2 = player('O');
     let _roundNum = 1;
+    let _gameNum = 1;
 
     const getCurrentSign = () => {
-        return _roundNum % 2 ? _player1.getSign() : _player2.getSign();
-    }
+        if (_gameNum % 2) 
+            return _roundNum % 2 ? _player1.getSign() : _player2.getSign();
+        else 
+            return _roundNum % 2 ? _player2.getSign() : _player1.getSign();
+    }   
 
     const resetGame = () => {
         gameBoard.clearBoard();
@@ -72,6 +76,7 @@ const gameController = (() => {
             displayController.markSign(indexX, indexY);
             if (_roundNum >= 5 && _isGameOver()) {
                 displayController.deactivateFields();
+                _gameNum++;
             } else {
                 _roundNum++;
                 displayController.showTurn();
