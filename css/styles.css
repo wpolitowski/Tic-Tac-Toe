@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Paytone+One&family=Russo+One&display=swap');
 
 :root {
-    --red: rgb(216, 75, 152);
-    --light: #f1faeeff;
+    --pink: rgb(216, 75, 152);
+    --light: #faeefa;
     --light-teal: #a8dadcff;
     --blue: #457b9dff;
     --navy: #1d3557ff;
@@ -25,10 +25,17 @@ body {
     display: grid;
     gap: 50px;
     place-content: center;
-    grid-template-areas: ".......... header    .........."
-                         ".......... turn-info .........."
-                         "player-one board     player-two"
-                         ".......... restart   ..........";
+    grid-template-areas: ".......... header-menu .........."
+                         ".......... turn-info   .........."
+                         "player-one board       player-two"
+                         ".......... restart     ..........";
+}
+
+.header-menu {
+    grid-area: header-menu;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 h1, .player > input, .turn-info {
@@ -36,12 +43,43 @@ h1, .player > input, .turn-info {
 }
 
 h1 {
-    grid-area: header;
-    font-size: 4rem;
+    font-size: 5rem;
     line-height: 1;
-    position: relative;
-    top: -50px;
-    filter: drop-shadow(-4px -4px var(--red));
+    filter: drop-shadow(-5px -5px var(--pink));
+}
+
+.mode-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+button {
+    box-shadow: 0 2px 4px rgba(0,0,0, .1);
+}
+
+button.mode {
+    width: 130px;
+    border: none;
+    background-color: var(--pink);
+    color: var(--light);
+    padding: .7rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    line-height: 1.2;
+    border-radius: 4px;
+}
+
+button.mode:hover {
+    cursor: pointer;
+    background-color: var(--light-teal);
+}
+
+.mode > img {
+    height: 24px;
 }
 
 .game-board {
@@ -68,18 +106,18 @@ h1 {
     grid-area: player-two;
 }
 
-.player > input, .restart-button {
+.player > input, button {
     font-family: inherit;
     background-color: inherit;
     color: inherit;
 }
 
 .player > input {
-    min-width: 100px;
+    max-width: 400px;
     border: none;
     outline: none;
     font-size: 2rem;
-
+    padding: 1rem;
 }
 
 .player > input:hover {
@@ -97,7 +135,7 @@ h1 {
 }
 
 .game-board > *:hover {
-    background-color: var(--red);
+    background-color: var(--pink);
     cursor: pointer;
 }
 
@@ -116,12 +154,12 @@ h1 {
     padding: 1rem;
     background-color: var(--navy);
     color: var(--light);
+    border-radius: 6px;
 }
 
 .restart-button:hover {
     cursor: pointer;
-    background-color: var(--red);
-    color: var(--navy);
+    background-color: var(--pink);
 }
 
 .turn-info {
