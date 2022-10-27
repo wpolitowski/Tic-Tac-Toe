@@ -8,35 +8,55 @@
     --navy: #1d3557ff;
 }
 
-
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
+.turn-info, button.mode {
+    font-size: 1rem;
+}
+
+.turn-info, .restart-button {
+    margin: 3rem 0;
+}
+
+.player > input, button {
+    font-family: inherit;
+    font-size: inherit;
+    background-color: inherit;
+    color: inherit;
+}
+
+
 body {
     min-height: 100vh;
-    min-width: 800px;
+    min-width: 1000px;
     font-family: "Paytone One", sans-serif;
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: var(--navy);
     background-color: var(--light);
-    display: grid;
-    gap: 50px;
-    place-content: center;
-    grid-template-areas: ".......... header-menu .........."
-                         ".......... turn-info   .........."
-                         "player-one board       player-two"
-                         ".......... restart     ..........";
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 .header-menu {
-    grid-area: header-menu;
-    width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: calc(50% - 10vh);
+    transition: top .5s ease;
 }
+
+.header-menu.active {
+    top: 5vh;
+}
+
 
 h1, .player > input, .turn-info {
     text-align: center;
@@ -60,11 +80,11 @@ button {
 }
 
 button.mode {
-    width: 130px;
+    max-width: 150px; 
     border: none;
     background-color: var(--pink);
     color: var(--light);
-    padding: .7rem 1rem;
+    padding: .8rem 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -82,56 +102,64 @@ button.mode:hover {
     height: 24px;
 }
 
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s ease-in;
+}
+
+main.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.turn-info {
+    flex-basis: 100%;
+}
+
 .game-board {
     width: 400px;
     height: 400px;
     display: grid;
     grid-template: repeat(3, 1fr) / repeat(3, 1fr);
     overflow: hidden;
-    grid-area: board;
 }
 
 .player {
     display: flex;
     flex-flow: column wrap;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
-}
-
-.player-one {
-    grid-area: player-one;
-}
-
-.player-two {
-    grid-area: player-two;
-}
-
-.player > input, button {
-    font-family: inherit;
-    background-color: inherit;
-    color: inherit;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .player > input {
-    max-width: 400px;
     border: none;
     outline: none;
-    font-size: 2rem;
     padding: 1rem;
+    font-size: 2vw;
 }
 
 .player > input:hover {
     background-color: var(--light-teal);
 }
 
-.game-board > * {
+.score {
+    font-size: 3rem;
+}
+
+.game-board > div {
     outline: 4px solid var(--light);
     background-color: var(--navy);
     color: var(--light-teal);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 4rem;
+    font-size: 5rem;
+    text-align: center;
+    vertical-align: middle;
+    line-height: calc(400px / 3 - 16px);
 }
 
 .game-board > *:hover {
@@ -143,15 +171,32 @@ button.mode:hover {
     pointer-events: none;
 }
 
+.sign {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+.marked {
+    opacity: 1;
+}
+
+.marked-ai {
+    transition: opacity .2s ease-in-out;
+}
+
+.restart-wrapper {
+    width: 100%;    
+    display: flex;
+    justify-content: center;
+}
+
 .restart-button {
-    grid-area: restart;
-    width: 50%;
-    justify-self: center;
-    font-size: 2rem;
+    font-size: inherit;
     border: none;
-    grid-area: restart;
     line-height: 1;
-    padding: 1rem;
+    padding: 1rem 1.2rem;
     background-color: var(--navy);
     color: var(--light);
     border-radius: 6px;
@@ -160,9 +205,4 @@ button.mode:hover {
 .restart-button:hover {
     cursor: pointer;
     background-color: var(--pink);
-}
-
-.turn-info {
-    grid-area: turn-info;
-    font-size: 1rem;
 }

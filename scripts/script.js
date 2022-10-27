@@ -28,18 +28,10 @@ const gameController = (() => {
         else return _player2;
     }
 
-    const switchGameMode = (e) => {
-        if (e.target.classList.contains("bot")) {
-            _mode = "ai";
-            e.target.previousElementSibling.classList.remove("inactive");
-            if (_currentPlayer() === _player2) addMark();
-        } else {
-            _mode = "standard";
-            e.target.nextElementSibling.classList.remove("inactive");
-        }
-
-        e.target.classList.add("inactive");
-    }
+    const setMode = (type) => {
+        if (type === 'ai') _mode = "ai";
+        else if (type === 'players') _mode = "players";
+    } 
 
     const resetGame = () => {
         gameBoard.clearBoard();
@@ -124,8 +116,8 @@ const gameController = (() => {
         if (_mode === "ai" && _currentPlayer() === _player2) {
             [x, y] = _minimax(_player2).index;
         } else {
-            x = e.target.dataset.index.slice(0,1);
-            y = e.target.dataset.index.slice(2);
+            x = e.currentTarget.dataset.index.slice(0,1);
+            y = e.currentTarget.dataset.index.slice(2);
         }
         
         if (gameBoard.isFieldEmpty(x, y)) {
@@ -152,7 +144,7 @@ const gameController = (() => {
         }
     }     
     
-    return { switchGameMode, getCurrentSign, addMark, resetGame }
+    return { setMode, getCurrentSign, addMark, resetGame }
 })();
 
 const gameBoard = (() => {
@@ -200,9 +192,9 @@ const displayController = (() => {
     const _playerScore = document.querySelectorAll('.score');
     const _info = document.querySelector('.turn-info');
     const _playerNames = document.querySelectorAll('.player > input');
-    const _twoPlayersBtn = document.querySelector('button.players');
-    const _computerPlayerBtn = document.querySelector('button.bot');
-    const _modeBtns = document.querySelectorAll('button.mode');
+    const _modeBtns = document.querySelectorAll('.mode');
+    const _gameSection = document.querySelector('main');
+    const _headerSection = document.querySelector('.header-menu');
 
     for (let i = 0; i < _divFields.length; i++) {
         _divsArray[Math.floor(i / 3)][i % 3] = _divFields[i];
@@ -210,8 +202,29 @@ const displayController = (() => {
     _divsArray.forEach( row => row.forEach( div => div.addEventListener('click', gameController.addMark)));
     _restartBtn.addEventListener('click', gameController.resetGame);
 
-    _modeBtns.forEach(button => button.addEventListener('click', gameController.switchGameMode));
+    const _displayGame = () => {
+        _headerSection.classList.add("active")
+        setTimeout(() => _gameSection.classList.add("visible"), 300);
+    }
 
+    _modeBtns.forEach(button => button.addEventListener('click', (e) => {
+        if (!e.currentTarget.parentNode.children[0].classList.contains("inactive") &&
+            !e.currentTarget.parentNode.children[1].classList.contains("inactive")) {
+                _displayGame();
+        }
+        
+        if (e.currentTarget.classList.contains("bot")) {
+            gameController.setMode("ai");
+            e.currentTarget.previousElementSibling.classList.remove("inactive");
+            if (gameController.getCurrentSign() === 'O') gameController.addMark();
+        } else {
+            gameController.setMode("players");
+            e.currentTarget.nextElementSibling.classList.remove("inactive");
+        }
+
+        e.currentTarget.classList.add("inactive");  
+    }));
+    
     const showTurn = () => {
         if (gameController.getCurrentSign() === 'X') {
             _info.textContent = `${_playerNames[0].value}, your turn`;
@@ -232,7 +245,13 @@ const displayController = (() => {
     }));
 
     const markSign = (x, y) => {
-        _divsArray[x][y].textContent = gameController.getCurrentSign();
+        const sign = gameController.getCurrentSign();
+        _divsArray[x][y].firstChild.textContent = sign;
+        _divsArray[x][y].firstChild.classList.add("marked");
+
+        if(sign === 'O' && _modeBtns[1].classList.contains("inactive")) {
+            _divsArray[x][y].firstChild.classList.add("marked-ai");
+        }
     }
 
     const incrementScore = index => {
@@ -258,7 +277,11 @@ const displayController = (() => {
     }
     
     const clearBoardDisplay = () => {
-        _divsArray.forEach( row => row.forEach( div => div.textContent = ""));
+        _divsArray.forEach( row => row.forEach( div => {
+            div.firstChild.textContent = "";
+            div.firstChild.classList.remove("marked");
+            div.firstChild.classList.remove("marked-ai");
+        }));
     }
 
     return { markSign, 
