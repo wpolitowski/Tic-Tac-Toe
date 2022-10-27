@@ -59,16 +59,19 @@ const gameController = (() => {
                     break;
                 }              
             }
-            if (gameWon) return true;
+            if (gameWon) return {
+                                    value: true,
+                                    combo: set
+                                }
         }
         return false;
     }
 
     const _minimax = (player) => {
         if (player === _player1) {
-            if (_winner(_player2)) return { score: 10 };
+            if (_winner(_player2).value) return { score: 10 };
         } else if (player === _player2) {
-            if (_winner(_player1)) return { score: -10 };
+            if (_winner(_player1).value) return { score: -10 };
         }
 
         if (_roundNum === 10) return { score: 0 };
@@ -123,7 +126,9 @@ const gameController = (() => {
         if (gameBoard.isFieldEmpty(x, y)) {
             gameBoard.markSign(x, y, gameController.getCurrentSign());
             displayController.markSign(x, y);
-            if (_roundNum >= 5 && _winner(_currentPlayer())) {
+            const checkWinner = _winner(_currentPlayer());
+            if (_roundNum >= 5 && checkWinner.value === true) {
+                displayController.markWinningCombo(checkWinner.combo);
                 displayController.deactivateFields();
                 if (_currentPlayer() === _player1) {
                     _player1.incrementScore();
@@ -268,6 +273,14 @@ const displayController = (() => {
         }
     }
 
+    const markWinningCombo = (combo) => {
+        for (let coordinates of combo) {
+            let x = coordinates.slice(0,1);
+            let y = coordinates.slice(2);
+            _divsArray[x][y].firstChild.style.color = `var(--pink)`;
+        }
+    }
+
     const activateFields = () => {
         _divsArray.forEach( row => row.forEach( div => div.classList.remove('inactive')));
     }
@@ -281,13 +294,15 @@ const displayController = (() => {
             div.firstChild.textContent = "";
             div.firstChild.classList.remove("marked");
             div.firstChild.classList.remove("marked-ai");
+            div.firstChild.style.color = `var(--light-teal)`;
         }));
     }
 
     return { markSign, 
              showTurn, 
              announceResult, 
-             incrementScore, 
+             incrementScore,
+             markWinningCombo, 
              activateFields, 
              deactivateFields, 
              clearBoardDisplay }
