@@ -50,31 +50,37 @@ const gameController = (() => {
                                       ["0 1", "1 1", "2 1"],  ["0 2", "1 2", "2 2"] ];
         
         for (let set of winningCombinations) {
-            let gameWon = true;
+            let gameWon = { value: true };
             for (let coordinates of set) {
                 let x = coordinates.slice(0,1);
                 let y = coordinates.slice(2);
                 if (gameBoard.getField(x, y) != player.getSign()) {
-                    gameWon = false;
+                    gameWon.value = false;
                     break;
                 }              
             }
-            if (gameWon) return {
+            if (gameWon.value === true) return {
                                     value: true,
                                     combo: set
                                 }
         }
-        return false;
+        return { value: false };
     }
 
-    const _minimax = (player) => {
-        if (player === _player1) {
-            if (_winner(_player2).value) return { score: 10 };
-        } else if (player === _player2) {
-            if (_winner(_player1).value) return { score: -10 };
-        }
+    const _minimax = (player, depth) => {
+        if (_roundNum >= 6) {
+            if (player === _player1) {
+                if (_winner(_player2).value) return { score: 10 - depth };
+            } else if (_winner(_player1).value) return { score: -10 + depth };
+            
 
-        if (_roundNum === 10) return { score: 0 };
+            if (_roundNum === 10) {
+                if (player === _player1) return { score: 0 - depth };
+                else return { score: 0 + depth};
+            }
+        }        
+
+        depth++;
 
         let moves = [];
         let x, y, min = 100, max = -100, bestIndex, score;
@@ -87,13 +93,13 @@ const gameController = (() => {
             _roundNum++;
 
             if (player === _player1) { 
-                score = _minimax(_player2).score;
+                score = _minimax(_player2, depth).score; 
                 if (score < min) {
                     min = score;
                     bestIndex = i;
                 }
             } else {
-                score = _minimax(_player1).score;
+                score = _minimax(_player1, depth).score;
                 if (score > max) {
                     max = score;
                     bestIndex = i;
@@ -105,19 +111,18 @@ const gameController = (() => {
             gameBoard.markSign(x, y, "");
             _roundNum--;
         }    
-
-        if (score === undefined) {
-            console.log(gameBoard.getGameBoard());
-            console.log(min, max, availableFields, _roundNum, _currentPlayer().getSign());
-
-        }
+        depth = 0;
         return moves[bestIndex];
     }
 
     const addMark = (e) => {    
         let x, y;
         if (_mode === "ai" && _currentPlayer() === _player2) {
-            [x, y] = _minimax(_player2).index;
+            if (_roundNum === 1) {
+                x = Math.floor(Math.random()*3);
+                y = Math.floor(Math.random()*3);                
+            }
+            else [x, y] = _minimax(_player2, 0).index;
         } else {
             x = e.currentTarget.dataset.index.slice(0,1);
             y = e.currentTarget.dataset.index.slice(2);
