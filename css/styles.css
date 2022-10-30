@@ -15,11 +15,11 @@
 }
 
 .turn-info, button.mode {
-    font-size: 1rem;
+    font-size: 2vh;
 }
 
 .turn-info, .restart-button {
-    margin: 3rem 0;
+    margin: 3vh 0;
 }
 
 .player > input, button {
@@ -54,7 +54,7 @@ body {
 }
 
 .header-menu.active {
-    top: 5vh;
+    top: 3vh;
 }
 
 
@@ -63,7 +63,7 @@ h1, .player > input, .turn-info {
 }
 
 h1 {
-    font-size: 5rem;
+    font-size: 9vh;
     line-height: 1;
     filter: drop-shadow(-5px -5px var(--pink));
 }
@@ -72,7 +72,7 @@ h1 {
     display: flex;
     justify-content: center;
     gap: 2rem;
-    padding: 2rem;
+    padding: 4vh;
 }
 
 button {
@@ -80,11 +80,11 @@ button {
 }
 
 button.mode {
-    max-width: 150px; 
+    max-width: 18vh; 
     border: none;
     background-color: var(--pink);
     color: var(--light);
-    padding: .8rem 1rem;
+    padding: 1.8vh 5vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -107,22 +107,26 @@ main {
     flex-wrap: wrap;
     justify-content: center;
     visibility: hidden;
+    display: none;
     opacity: 0;
-    transition: opacity .4s ease-in;
+    transition: opacity 2.4s ease-in;
+    margin-bottom: 2vh
 }
 
 main.visible {
     visibility: visible;
+    display: flex;
     opacity: 1;
 }
 
 .turn-info {
     flex-basis: 100%;
+    margin-top: 0;
 }
 
 .game-board {
-    width: 400px;
-    height: 400px;
+    width: 50vh;
+    height: 50vh;
     display: grid;
     grid-template: repeat(3, 1fr) / repeat(3, 1fr);
     overflow: hidden;
