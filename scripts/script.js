@@ -15,6 +15,7 @@ const gameController = (() => {
     let _roundNum = 1;
     let _gameNum = 1;
     let _mode = "ai";
+    let _difficulty = "hard";
 
     const getCurrentSign = () => {
         if (_gameNum % 2) 
@@ -71,13 +72,9 @@ const gameController = (() => {
         if (_roundNum >= 6) {
             if (player === _player1) {
                 if (_winner(_player2).value) return { score: 10 - depth };
-            } else if (_winner(_player1).value) return { score: -10 + depth };
-            
+            } else if (_winner(_player1).value) return { score: -10 + depth };            
 
-            if (_roundNum === 10) {
-                if (player === _player1) return { score: 0 - depth };
-                else return { score: 0 + depth};
-            }
+            if (_roundNum === 10) return { score: 0 };
         }        
 
         depth++;
@@ -112,6 +109,17 @@ const gameController = (() => {
             _roundNum--;
         }    
         depth = 0;
+
+        // moves.sort( (x, y) => y.score - x.score);
+
+        // if(_difficulty === 'hard') {
+        //     let num = Math.floor(Math.random()*10) + 1;
+        //     if (num % 1 === 0   ) {
+        //         return moves[0];
+        //         if (moves[1]) return moves[1];
+        //     }
+        // }
+
         return moves[bestIndex];
     }
 
@@ -119,8 +127,10 @@ const gameController = (() => {
         let x, y;
         if (_mode === "ai" && _currentPlayer() === _player2) {
             if (_roundNum === 1) {
-                x = Math.floor(Math.random()*3);
-                y = Math.floor(Math.random()*3);                
+                // x = Math.floor(Math.random()*3);
+                // y = Math.floor(Math.random()*3);  
+                x = 0;
+                y = 1;              
             }
             else [x, y] = _minimax(_player2, 0).index;
         } else {
@@ -158,7 +168,7 @@ const gameController = (() => {
 })();
 
 const gameBoard = (() => {
-    const _board = new Array(3).fill("").map( () => new Array(3).fill(""));
+    const _board = new Array(3).fill("").map( () => new Array(3).fill(""));    
 
     const getGameBoard = () => {
         return _board;
@@ -214,7 +224,7 @@ const displayController = (() => {
 
     const _displayGame = () => {
         _headerSection.classList.add("active")
-        setTimeout(() => _gameSection.classList.add("visible"), 300);
+        setTimeout(() => _gameSection.classList.add("visible"), 500);
     }
 
     _modeBtns.forEach(button => button.addEventListener('click', (e) => {
@@ -312,3 +322,5 @@ const displayController = (() => {
              deactivateFields, 
              clearBoardDisplay }
 })();
+
+
