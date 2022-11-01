@@ -182,6 +182,7 @@ main.visible {
 
 .marked {
     opacity: 1;
+    pointer-events: none;
 }
 
 .marked-ai {

@@ -1,12 +1,9 @@
 const player = (sign) => {
-    let _score = 0;
     const getSign = () => {
         return sign;
     }
-    const incrementScore = () => {
-        _score++;
-    }
-    return { getSign, incrementScore };   
+
+    return { getSign };   
 }
 
 const gameController = (() => {
@@ -15,7 +12,6 @@ const gameController = (() => {
     let _roundNum = 1;
     let _gameNum = 1;
     let _mode = "ai";
-    let _difficulty = "hard";
 
     const getCurrentSign = () => {
         if (_gameNum % 2) 
@@ -60,10 +56,10 @@ const gameController = (() => {
                     break;
                 }              
             }
-            if (gameWon.value === true) return {
-                                    value: true,
-                                    combo: set
-                                }
+            if (gameWon.value === true) return  {
+                                                    value: true,
+                                                    combo: set
+                                                }
         }
         return { value: false };
     }
@@ -110,16 +106,6 @@ const gameController = (() => {
         }    
         depth = 0;
 
-        // moves.sort( (x, y) => y.score - x.score);
-
-        // if(_difficulty === 'hard') {
-        //     let num = Math.floor(Math.random()*10) + 1;
-        //     if (num % 1 === 0   ) {
-        //         return moves[0];
-        //         if (moves[1]) return moves[1];
-        //     }
-        // }
-
         return moves[bestIndex];
     }
 
@@ -127,12 +113,9 @@ const gameController = (() => {
         let x, y;
         if (_mode === "ai" && _currentPlayer() === _player2) {
             if (_roundNum === 1) {
-                // x = Math.floor(Math.random()*3);
-                // y = Math.floor(Math.random()*3);  
-                x = 0;
-                y = 1;              
-            }
-            else [x, y] = _minimax(_player2, 0).index;
+                x = Math.floor(Math.random()*3);
+                y = Math.floor(Math.random()*3);              
+            } else [x, y] = _minimax(_player2, 0).index;
         } else {
             x = e.currentTarget.dataset.index.slice(0,1);
             y = e.currentTarget.dataset.index.slice(2);
@@ -146,16 +129,15 @@ const gameController = (() => {
                 displayController.markWinningCombo(checkWinner.combo);
                 displayController.deactivateFields();
                 if (_currentPlayer() === _player1) {
-                    _player1.incrementScore();
                     displayController.incrementScore(0);
                     displayController.announceResult('player one');
                 } else {
-                    _player2.incrementScore();
                     displayController.incrementScore(1);
                     displayController.announceResult('player two');
                 }
             } else if (_roundNum === 9) {
                 displayController.announceResult('draw');
+                displayController.deactivateFields();
             } else {
                 _roundNum++;
                 displayController.showTurn();
@@ -170,9 +152,6 @@ const gameController = (() => {
 const gameBoard = (() => {
     const _board = new Array(3).fill("").map( () => new Array(3).fill(""));    
 
-    const getGameBoard = () => {
-        return _board;
-    }
     const isFieldEmpty = (x, y) => {
         return !_board[x][y];
     }
@@ -202,7 +181,7 @@ const gameBoard = (() => {
         }
     }
 
-    return { getGameBoard, isFieldEmpty, markSign, getField, getAvailableFields, clearBoard };
+    return { isFieldEmpty, markSign, getField, getAvailableFields, clearBoard };
 })();
 
 const displayController = (() => {
@@ -268,6 +247,7 @@ const displayController = (() => {
         const sign = gameController.getCurrentSign();
         _divsArray[x][y].firstChild.textContent = sign;
         _divsArray[x][y].firstChild.classList.add("marked");
+        _divsArray[x][y].classList.add("inactive");
 
         if(sign === 'O' && _modeBtns[1].classList.contains("inactive")) {
             _divsArray[x][y].firstChild.classList.add("marked-ai");
@@ -297,11 +277,11 @@ const displayController = (() => {
     }
 
     const activateFields = () => {
-        _divsArray.forEach( row => row.forEach( div => div.classList.remove('inactive')));
+        _divsArray.forEach( row => row.forEach( div => div.classList.remove("inactive")));
     }
 
     const deactivateFields = () => {
-        _divsArray.forEach( row => row.forEach( div => div.classList.add('inactive')));
+        _divsArray.forEach( row => row.forEach( div => div.classList.add("inactive")));
     }
     
     const clearBoardDisplay = () => {
@@ -322,5 +302,3 @@ const displayController = (() => {
              deactivateFields, 
              clearBoardDisplay }
 })();
-
-
