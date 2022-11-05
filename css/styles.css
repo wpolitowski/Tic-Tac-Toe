@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Paytone+One&family=Russo+One&display=swap');
 
 :root {
-    --pink: rgb(216, 75, 152);
+    --pink: #d84b98;
     --light: #faeefa;
     --light-teal: #a8dadcff;
     --blue: #457b9dff;
@@ -158,10 +158,10 @@ main.visible {
     outline: 4px solid var(--light);
     background-color: var(--navy);
     color: var(--light-teal);
-    font-size: 5rem;
+    font-size: 10vh;
     text-align: center;
     vertical-align: middle;
-    line-height: calc(400px / 3 - 16px);
+    line-height: calc(50vh / 3 - 16px);
 }
 
 .game-board > *:hover {
