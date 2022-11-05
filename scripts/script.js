@@ -214,10 +214,12 @@ const displayController = (() => {
         
         if (e.currentTarget.classList.contains("bot")) {
             gameController.setMode("ai");
+            _playerNames[1].value = "Computer player";
             e.currentTarget.previousElementSibling.classList.remove("inactive");
             if (gameController.getCurrentSign() === 'O') gameController.addMark();
         } else {
             gameController.setMode("players");
+            _playerNames[1].value = "Player two";
             e.currentTarget.nextElementSibling.classList.remove("inactive");
         }
 
